@@ -1,0 +1,268 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --paper: #f5f1e8;
+    --ink: #0a0a0a;
+    --signal: #ff3b1f;
+    --cobalt: #1f3bff;
+    --acid: #d4ff1f;
+    --grain: 0.04;
+
+    --vt-x: 50vw;
+    --vt-y: 50vh;
+    --vt-r: 150vmax;
+  }
+
+  * {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
+    overflow-x: hidden;
+    transition: background-color 0.7s cubic-bezier(0.65, 0.05, 0.36, 1),
+      color 0.7s cubic-bezier(0.65, 0.05, 0.36, 1);
+  }
+
+  html.dark body { background: var(--ink); color: var(--paper); }
+  ::selection { background: var(--signal); color: var(--paper); }
+
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+  .lenis.lenis-stopped { overflow: hidden; }
+  .lenis.lenis-smooth iframe { pointer-events: none; }
+}
+
+@layer utilities {
+  /* Grain — gated by tier. Disabled on mid/low. */
+  .grain::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    opacity: var(--grain);
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+  }
+  html[data-perf="low"] .grain::after,
+  html[data-perf="mid"] .grain::after { display: none; }
+
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
+
+  .editorial-display {
+    font-family: "Instrument Serif", Georgia, serif;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+  }
+
+  .mono-label {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 10.5px;
+  }
+
+  .hairline { border-color: rgba(0, 0, 0, 0.12); }
+  html.dark .hairline { border-color: rgba(255, 255, 255, 0.12); }
+
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Hover transitions — shorter on low-tier */
+  a, button, .interactive {
+    transition: color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+      background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.4s ease;
+  }
+  html[data-perf="low"] a,
+  html[data-perf="low"] button,
+  html[data-perf="low"] .interactive {
+    transition-duration: 0.2s;
+  }
+}
+
+/* ═══════ THEME TRANSITION ═══════ */
+@supports (view-transition-name: a) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+  ::view-transition-old(root) { z-index: 1; }
+  ::view-transition-new(root) { z-index: 2; }
+
+  html[data-theme-anim="1"]::view-transition-new(root) {
+    animation: theme-clip 0.85s cubic-bezier(0.65, 0.05, 0.36, 1);
+  }
+  html[data-theme-anim="1"]::view-transition-old(root) {
+    animation: theme-fade 0.85s cubic-bezier(0.65, 0.05, 0.36, 1);
+  }
+  /* Faster transition on low/mid */
+  html[data-perf="low"][data-theme-anim="1"]::view-transition-new(root),
+  html[data-perf="low"][data-theme-anim="1"]::view-transition-old(root),
+  html[data-perf="mid"][data-theme-anim="1"]::view-transition-new(root),
+  html[data-perf="mid"][data-theme-anim="1"]::view-transition-old(root) {
+    animation-duration: 0.45s;
+  }
+
+  @keyframes theme-clip {
+    from { clip-path: circle(0 at var(--vt-x) var(--vt-y)); }
+    to   { clip-path: circle(var(--vt-r) at var(--vt-x) var(--vt-y)); }
+  }
+  @keyframes theme-fade { to { opacity: 1; } }
+}
+
+.theme-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  clip-path: circle(0 at var(--ox) var(--oy));
+  transition: clip-path 0.85s cubic-bezier(0.65, 0.05, 0.36, 1), opacity 0.4s ease;
+}
+.theme-overlay.active { clip-path: circle(150vmax at var(--ox) var(--oy)); }
+
+/* ═══════ PAGE TRANSITIONS ═══════ */
+@supports (view-transition-name: a) {
+  ::view-transition-old(hero-title),
+  ::view-transition-new(hero-title) {
+    animation-duration: 0.7s;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    mix-blend-mode: normal;
+  }
+}
+
+/* ═══════ LINK UNDERLINE ═══════ */
+.link-edit { position: relative; display: inline-block; }
+.link-edit::after {
+  content: "";
+  position: absolute; left: 0; bottom: -2px;
+  width: 100%; height: 1px;
+  background: currentColor;
+  transform-origin: right;
+  transform: scaleX(1);
+  transition: transform 0.5s cubic-bezier(0.77, 0, 0.18, 1);
+}
+.link-edit:hover::after {
+  transform-origin: left;
+  transform: scaleX(0);
+  animation: link-redraw 0.7s cubic-bezier(0.77, 0, 0.18, 1) 0.3s forwards;
+}
+@keyframes link-redraw {
+  from { transform-origin: left; transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+html[data-perf="low"] .link-edit:hover::after { animation: none; transform: scaleX(1); }
+
+/* ═══════ AMBIENT BLUEPRINT GRID — gated ═══════ */
+.bg-blueprint {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(10, 10, 10, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10, 10, 10, 0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  animation: bg-drift 22s ease-in-out infinite alternate;
+}
+html.dark .bg-blueprint {
+  background-image:
+    linear-gradient(rgba(245, 241, 232, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245, 241, 232, 0.04) 1px, transparent 1px);
+}
+@keyframes bg-drift {
+  0%   { background-position: 0 0, 0 0; }
+  100% { background-position: 80px 40px, 40px 80px; }
+}
+/* Low: hide entirely. Mid: keep static, no animation. */
+html[data-perf="low"] .bg-blueprint { display: none; }
+html[data-perf="mid"] .bg-blueprint { animation: none; mask-image: none; -webkit-mask-image: none; opacity: 0.5; }
+
+/* ═══════ CURSOR FOLLOWER ═══════ */
+.cursor-follow {
+  position: fixed;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--signal);
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate3d(-100px, -100px, 0);
+  mix-blend-mode: difference;
+  opacity: 0;
+  transition: opacity 0.3s ease, width 0.3s ease, height 0.3s ease;
+  will-change: transform;
+}
+.cursor-follow.active { opacity: 0.7; }
+.cursor-follow.hover { width: 40px; height: 40px; opacity: 0.4; }
+@media (pointer: coarse) { .cursor-follow { display: none; } }
+html[data-perf="low"] .cursor-follow,
+html[data-perf="mid"] .cursor-follow { display: none; }
+
+/* ═══════ REVEAL UTILITIES ═══════ */
+.reveal-mask { overflow: hidden; display: inline-block; }
+.reveal-mask > * {
+  display: inline-block;
+  transform: translateY(100%);
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-mask.in > * { transform: translateY(0%); }
+
+.tilt-card { transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform; }
+
+.kinetic-char { display: inline-block; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), color 0.6s ease; }
+.kinetic-word { display: inline-block; overflow: hidden; }
+
+.sticky-stage {
+  position: sticky; top: 0;
+  height: 100svh;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+
+:focus-visible { outline: 2px dashed var(--signal); outline-offset: 4px; }
+
+/* ═══════ BACKDROP-BLUR — gated ═══════
+   backdrop-filter is one of the most expensive CSS properties.
+   Replace with solid color on mid/low. */
+html[data-perf="mid"] .backdrop-blur-xl,
+html[data-perf="low"] .backdrop-blur-xl {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+/* Low/Mid: replace transparent+blur with solid background */
+html[data-perf="mid"] header.fixed > div,
+html[data-perf="low"] header.fixed > div {
+  /* Inner wrap doesn't need extra bg */
+}
+html[data-perf="mid"] header.fixed.is-scrolled,
+html[data-perf="low"] header.fixed.is-scrolled {
+  background-color: rgb(245 241 232) !important;
+}
+html.dark[data-perf="mid"] header.fixed.is-scrolled,
+html.dark[data-perf="low"] header.fixed.is-scrolled {
+  background-color: rgb(10 10 10) !important;
+}
+
+/* ═══════ REDUCED MOTION ═══════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .cursor-follow { display: none; }
+  .bg-blueprint { animation: none; }
+}
