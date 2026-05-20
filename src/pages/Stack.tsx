@@ -3,7 +3,7 @@ import { SectionTitle } from "@/components/SectionTitle";
 import { STACK } from "@/data/portfolio";
 import { useMemo, useState } from "react";
 
-const CATS = ["ALL", "LANG", "MCU", "RTOS", "SBC", "DSP", "FPGA", "RF", "NET", "BUS", "EDA", "LAB"];
+const CATS = ["ALL", "LANG", "MCU", "RTOS", "DSP", "FPGA", "SBC", "RF", "NET", "BUS", "EDA", "BUILD", "LAB", "HW", "SENS", "AI", "METH", "QA", "SEC"];
 
 export function Stack() {
   const [filter, setFilter] = useState("ALL");
@@ -29,8 +29,9 @@ export function Stack() {
             className="col-span-12 md:col-span-4 md:pl-8 md:border-l hairline self-end"
           >
             <p className="text-base md:text-lg leading-snug text-pretty">
-              Ce que j'utilise au quotidien — du langage bas-niveau aux instruments de laboratoire.
-              Filtrer par catégorie pour zoomer.
+              80+ entrées techniques — du langage bas-niveau aux instruments de laboratoire,
+              en passant par les protocoles industriels et les capteurs intégrés. Filtrer par
+              catégorie pour zoomer.
             </p>
           </motion.div>
         </div>

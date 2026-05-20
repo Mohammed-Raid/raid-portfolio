@@ -69,7 +69,7 @@ export function Nav() {
                 transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
               />
               <span className="mono-label text-ink-600 dark:text-ink-300 group-hover:text-ink dark:group-hover:text-ink-50 transition-colors">
-                M.R.A · v3.1
+                M.R.A · v3.3
               </span>
             </ViewTransitionLink>
 

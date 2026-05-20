@@ -41,7 +41,7 @@ function Boot({ onDone, fast }: { onDone: () => void; fast: boolean }) {
       exit={{ clipPath: "inset(0 0 100% 0)", opacity: 1 }}
       transition={{ duration: 0.7, ease: [0.77, 0, 0.18, 1] }}
     >
-      <div className="mono-label text-ink-400 mb-6">MRA · v3.2 — booting</div>
+      <div className="mono-label text-ink-400 mb-6">MRA · v3.3 — booting</div>
       <div className="editorial-display text-[clamp(80px,18vw,260px)] leading-none tracking-mega tabular-nums">
         {String(count).padStart(3, "0")}
       </div>

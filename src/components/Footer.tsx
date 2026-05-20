@@ -56,7 +56,7 @@ export function Footer() {
         <div className="mt-16 pt-6 border-t hairline flex flex-wrap gap-4 justify-between mono-label text-[10px] text-ink-500 dark:text-ink-400">
           <span>© 2026 — Mohamed Raid Abadou</span>
           <span>Built with React · Vite · Framer Motion · Tailwind</span>
-          <span>v3.0 — Editorial Edition</span>
+          <span>v3.3 — Adaptive Edition</span>
         </div>
       </div>
     </footer>

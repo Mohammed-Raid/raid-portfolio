@@ -118,8 +118,8 @@ export function Home() {
             >
               <p className="text-lg md:text-xl leading-snug text-pretty">
                 Mohamed Raid Abadou — M2 ESET à l'Université Savoie Mont Blanc. Je conçois du firmware
-                temps-réel, des nœuds IoT et des chaînes de traitement du signal de bout en bout. Du
-                schéma KiCad au déploiement terrain.
+                temps-réel, des nœuds IoT, des chaînes RF et de la vision embarquée — du schéma KiCad
+                au déploiement terrain industriel.
               </p>
               <div className="flex flex-wrap gap-3 mt-8">
                 <Magnetic>
@@ -148,9 +148,9 @@ export function Home() {
               className="col-span-12 md:col-span-6 lg:col-span-7 lg:pl-12 lg:border-l hairline grid grid-cols-2 sm:grid-cols-4 gap-y-6"
             >
               {[
-                { l: "Focus", v: "Firmware RT", s: "FreeRTOS · ESP32 · STM32" },
-                { l: "Zone", v: "GRE · CMB · ANN", s: "Auvergne-Rhône-Alpes" },
-                { l: "Langues", v: "AR · FR · EN", s: "native · B2 · C1" },
+                { l: "Focus", v: "Firmware · AI", s: "FreeRTOS · ESP32 · Edge" },
+                { l: "Zone", v: "GRE · CMB · LYO", s: "Auvergne-Rhône-Alpes" },
+                { l: "Langues", v: "AR · FR · EN", s: "Natif · B2 · C1+" },
                 { l: "Degree", v: "M2 ESET ’26", s: "Univ. Savoie Mont Blanc" },
               ].map((m, i) => (
                 <motion.div
@@ -186,7 +186,7 @@ export function Home() {
       </section>
 
       <Marquee
-        items={["Firmware temps-réel", "IoT", "RF", "Traitement du signal", "Embedded", "Hardware"]}
+        items={["Firmware temps-réel", "IoT", "RF", "DSP signal", "AI · edge", "Hardware"]}
         separator="✦"
         velocity={heavyEffects ? velocityFactor : undefined}
       />
@@ -220,9 +220,9 @@ export function Home() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mt-16 pt-12 border-t hairline">
               {[
                 { v: 5, suffix: "+", l: "Years C/C++" },
-                { v: 6, l: "Projects shipped" },
+                { v: 7, l: "Projects shipped" },
+                { v: 80, suffix: "+", l: "Stack entries" },
                 { v: 3, l: "Internships" },
-                { v: 4, l: "Languages" },
               ].map((m) => (
                 <motion.div
                   key={m.l}
@@ -243,7 +243,7 @@ export function Home() {
       </section>
 
       <section className="mx-auto max-w-[1400px] w-full px-5 sm:px-8 lg:px-12 py-12 md:py-24">
-        <SectionTitle index="02" kicker="Sélection · 6 projets" emphasis="projects.">
+        <SectionTitle index="02" kicker="Sélection · 7 projets" emphasis="projects.">
           Featured projects.
         </SectionTitle>
 
